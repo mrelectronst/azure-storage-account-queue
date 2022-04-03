@@ -1,0 +1,56 @@
+﻿@model AzureMVC.Models.Product
+
+<form class="form-inline" asp-action="@(ViewBag.IsUpdate ? "Put" : "Post")" method="post" enctype="application/x-www-form-urlencoded">
+    <input class="form-control mr-3" asp-for="Name" placeholder="Product Name" />
+    <input class="form-control mr-3" asp-for="Price" placeholder="Product Price" />
+    <input class="form-control mr-3" asp-for="Stock" placeholder="Product Stock" />
+    <input class="form-control mr-3" asp-for="Color" placeholder="Product Color" />
+
+    <input type="hidden" asp-for="RowKey" />
+    <input type="hidden" asp-for="PartitionKey" />
+    <input type="hidden" asp-for="ETag" />
+
+    <input class="btn btn-primary" type="submit" value="@(ViewBag.IsUpdate ? "Update" : "Save")" />
+</form>
+
+<br />
+<h2>Products</h2>
+
+<form class="form-inline mb-2" asp-action="Query" method="get">
+    <input class="form-control mr-2" type="number" name="stock" placeholder="Search Over Stock" />
+    <input class="btn btn-info" type="submit" value="Search" />
+</form>
+
+<table class="table table-bordered">
+    <tr>
+        <th>RowKey</th>
+        <th>PartitionKey</th>
+        <th>Name</th>
+        <th>Price</th>
+        <th>Stock</th>
+        <th>Color</th>
+        <th>TimeStamp</th>
+        <th>Actions</th>
+    </tr>
+    @foreach (var item in ViewBag.products as List<AzureMVC.Models.Product>)
+    {
+        <tr>
+            <td>@item.RowKey</td>
+            <td>@item.PartitionKey</td>
+            <td>@item.Name</td>
+            <td>@item.Price</td>
+            <td>@item.Stock</td>
+            <td>@item.Color</td>
+            <td>@item.Timestamp</td>
+            <td>
+                <a class="btn btn-success btn-sm" asp-action="Put" asp-controller="TableStorages" asp-route-RowKey="@item.RowKey" asp-route-PartitionKey="@item.PartitionKey">
+                    Update
+                </a>
+                <a class="btn btn-danger btn-sm" asp-action="Delete" asp-controller="TableStorages" asp-route-RowKey="@item.RowKey" asp-route-PartitionKey="@item.PartitionKey">
+                    Delete
+                </a>
+            </td>
+        </tr>
+    }
+</table>
+
